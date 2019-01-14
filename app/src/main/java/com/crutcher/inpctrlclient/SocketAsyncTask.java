@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,18 +17,19 @@ import java.util.Scanner;
 public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> {
 
 
-    static BufferedWriter bw;
+    private BufferedWriter bw;
     public Socket socket;
 
     @Override
     protected Object doInBackground(AppCompatActivity... a) {
+        Log.d("SocketAsyncTask", "attempting to run...");
         try {
             Log.d("SocketAsyncTask", "running...");
 
             Button scUp = a[0].findViewById(R.id.scrollUp);
             Button scDw = a[0].findViewById(R.id.scrollDown);
 
-            String addr = "192.168.0.42";
+            String addr = GlobalVars.getIpAddr();
 
             socket = new Socket(addr, 1488);
 
@@ -71,22 +70,12 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
         return null;
     }
 
-    public void closeConnection()
+    public void closeConnection() throws IOException
     {
         spitOut("closeConnection");
+        socket.close();
+        cancel(true);
     }
-
-
-//    @Override
-//    protected void onCancelled() {
-//        try {
-//            Log.d("SocketAsyncTask", "closing socket...");
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        super.onCancelled();
-//    }
 
     private void spitOut(String str)
     {
