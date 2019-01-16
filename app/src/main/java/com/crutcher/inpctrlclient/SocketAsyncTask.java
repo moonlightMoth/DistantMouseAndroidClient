@@ -1,5 +1,6 @@
 package com.crutcher.inpctrlclient;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> {
 
@@ -20,14 +21,16 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
     private BufferedWriter bw;
     public Socket socket;
 
+    @SuppressLint("WrongThread")
     @Override
     protected Object doInBackground(AppCompatActivity... a) {
         Log.d("SocketAsyncTask", "attempting to run...");
         try {
             Log.d("SocketAsyncTask", "running...");
 
-            Button scUp = a[0].findViewById(R.id.scrollUp);
-            Button scDw = a[0].findViewById(R.id.scrollDown);
+            final Button scUp = a[0].findViewById(R.id.scrollUp);
+            final Button scDw = a[0].findViewById(R.id.scrollDown);
+            final View mvPane = a[0].findViewById(R.id.mvPane);
 
             String addr = GlobalVars.getIpAddr();
 
@@ -35,26 +38,36 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
 
             bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-            final Scanner sc = new Scanner(new InputStreamReader(socket.getInputStream()));
+            final BufferedReader br =
+                    new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             scUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    spitOut("4c");
+                    scrollUp();
                 }
             });
 
             scDw.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    spitOut("5c");
+                    scrollDw();
                 }
             });
 
-            while (true) {
-                if (sc.hasNextLine()) {
+            mvPane.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickLmb();
+                }
+            });
 
-                    Log.d("answer", sc.nextLine());
+            String inputLine;
+
+            while (true) {
+                if ((inputLine = br.readLine()) != null) {
+
+                    Log.d("answer", inputLine);
                 }
                 if (isCancelled())
                 {
@@ -70,11 +83,28 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
         return null;
     }
 
-    public void closeConnection() throws IOException
+    void closeConnection() throws IOException
     {
         spitOut("closeConnection");
+        socket.shutdownInput();
+        socket.shutdownOutput();
         socket.close();
         cancel(true);
+    }
+
+    private void clickLmb()
+    {
+        spitOut("1c");
+    }
+
+    private void scrollUp()
+    {
+        spitOut("4c");
+    }
+
+    private void scrollDw()
+    {
+        spitOut("5c");
     }
 
     private void spitOut(String str)

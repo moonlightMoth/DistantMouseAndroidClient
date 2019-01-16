@@ -56,19 +56,57 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
-            android:id="@+id/scrollUp"
-            android:text="up"/>
+            android:orientation="horizontal"
+            android:layout_weight="14">
 
-        <android.support.v7.widget.AppCompatButton
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7"
-            android:id="@+id/scrollDown"
-            android:text="down"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/scrollUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:text="up" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/scrollDown"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:text="dw" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:id="@+id/mvPane"
+                android:background="@color/colorPrimaryDark">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="mv pane"
+                    android:textColor="#000000"
+                    android:visibility="visible"
+                    android:textAlignment="center"
+                    android:textSize="100dp"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -49,7 +49,6 @@ public class ControlPanelActivity extends AppCompatActivity {
                     connect();
             }
         });
-
     }
 
     @Override
