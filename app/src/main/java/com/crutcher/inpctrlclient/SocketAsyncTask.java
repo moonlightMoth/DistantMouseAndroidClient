@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
@@ -22,13 +23,30 @@ import static java.lang.StrictMath.abs;
 public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> {
 
 
-    private BufferedWriter bw;
+    private OutputStream os;
     Socket socket;
     private int x;
     private int y;
     private int olderX;
     private int olderY;
     private boolean isClick = false;
+
+
+    private final byte MV_UP = 1;
+    private final byte MV_DW = 2;
+    private final byte MV_RT = 3;
+    private final byte MV_LT = 4;
+    private final byte SC_UP = 5;
+    private final byte SC_DW = 6;
+    private final byte CL_LB = 7;
+    private final byte DR_ON = 8;
+    private final byte DR_OF = 9;
+    private final byte CL_RB = 10;
+    private final byte CL_MB = 11;
+    private final byte EXIT_SIGNAL = 127;
+
+    private byte[] byteWrapper = new byte[1];
+
 
     @SuppressLint("WrongThread")
     @Override
@@ -46,7 +64,7 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
 
             socket = new Socket(addr, 1488);
 
-            bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            os = socket.getOutputStream();
 
             final BufferedReader br =
                     new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -104,18 +122,18 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
             });
 
 
-            String inputLine;
-
-            while (true) {
-                if ((inputLine = br.readLine()) != null) {
-
-                    Log.d("answer", inputLine);
-                }
-                if (isCancelled())
-                {
-                    return new Object();
-                }
-            }
+//            String inputLine;
+//
+//            while (true) {
+//                if ((inputLine = br.readLine()) != null) {
+//
+//                    Log.d("answer", inputLine);
+//                }
+//                if (isCancelled())
+//                {
+//                    return new Object();
+//                }
+//            }
 
 
         } catch (IOException e) {
@@ -127,36 +145,56 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
 
     private void clickLmb()
     {
-        spitOut("1c");
+        byteWrapper[0] = CL_LB;
+        flushWrapper();
     }
 
     private void scrollUp()
     {
-        spitOut("4c");
+        byteWrapper[0] = SC_UP;
+        flushWrapper();
     }
 
     private void scrollDw()
     {
-        spitOut("5c");
+        byteWrapper[0] = SC_DW;
+        flushWrapper();
     }
 
     private void movePointer() //TODO pointer movement is crutch
     {
         if (x - olderX < 0)
+        {
+            byteWrapper[0] = MV_LT;
+
             for (int i = 0; i < abs(x - olderX); i++)
-                spitOut("-h");
+                flushWrapper();
+        }
 
         if (x - olderX > 0)
+        {
+            byteWrapper[0] = MV_RT;
+
             for (int i = 0; i < x - olderX; i++)
-                spitOut("+h");
+                flushWrapper();
+        }
 
         if (y - olderY < 0)
+        {
+            byteWrapper[0] = MV_UP;
+
             for (int i = 0; i < abs(y - olderY); i++)
-                spitOut("+v");
+                flushWrapper();
+        }
 
         if (y - olderY > 0)
+        {
+            byteWrapper[0] = MV_DW;
+
             for (int i = 0; i < y - olderY; i++)
-                spitOut("-v");
+                flushWrapper();
+        }
+
 
 //        spitOut("mv " + Integer.toString(x - olderX) + " "
 //                + Integer.toString(y - olderY));
@@ -173,7 +211,7 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
         return false;
     }
 
-    private void spitOut(String str)
+    private void spitOut(byte[] bytes)
     {
         try {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -185,18 +223,25 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
                 StrictMode.setThreadPolicy(policy);
             }
 
-            Log.d("listener", str);
-            bw.write(str);
-            bw.newLine();
-            bw.flush();
-        } catch (IOException e) {
+            os.write(bytes);
+            os.flush();
+
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
+    private void flushWrapper()
+    {
+        spitOut(byteWrapper);
+    }
+
     void closeConnection() throws IOException
     {
-        spitOut("closeConnection");
+        byteWrapper[0] = EXIT_SIGNAL;
+        flushWrapper();
+
         socket.shutdownInput();
         socket.shutdownOutput();
         socket.close();
