@@ -106,8 +106,6 @@ class SocketProcessor extends Thread
     {
         try
         {
-            Log.d("sout", bytes[1] + " " + bytes[2]);
-
             os.write(bytes);
             os.flush();
         }

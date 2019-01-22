@@ -110,6 +110,12 @@ public class ControlPanelActivity extends AppCompatActivity {
                 {
                     olderX = x;
                     olderY = y;
+                    Log.d("mvPane", "Down");
+                }
+
+                if (action == MotionEvent.ACTION_UP)
+                {
+                    Log.d("mvPane", "Up");
                 }
 
                 if (action == MotionEvent.ACTION_MOVE)
