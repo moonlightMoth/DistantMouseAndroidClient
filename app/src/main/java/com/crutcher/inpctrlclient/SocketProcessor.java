@@ -71,6 +71,12 @@ class SocketProcessor extends Thread
         flushWrapper();
     }
 
+    void clickRmb()
+    {
+        byteWrapper[0] = CL_RB;
+        flushWrapper();
+    }
+
     void scrollUp()
     {
         byteWrapper[0] = SC_UP;
