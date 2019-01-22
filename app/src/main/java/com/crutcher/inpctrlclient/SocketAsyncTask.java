@@ -101,11 +101,7 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
                     {
                         olderX = x;
                         olderY = y;
-                        //createClickArea();
                     }
-
-//                    if (action == MotionEvent.ACTION_UP && doesPointerBelongClickArea())
-//                        clickLmb();
 
                     if (action == MotionEvent.ACTION_MOVE)
                     {
@@ -120,20 +116,6 @@ public class SocketAsyncTask extends AsyncTask<AppCompatActivity, Void, Object> 
                     return true;
                 }
             });
-
-
-//            String inputLine;
-//
-//            while (true) {
-//                if ((inputLine = br.readLine()) != null) {
-//
-//                    Log.d("answer", inputLine);
-//                }
-//                if (isCancelled())
-//                {
-//                    return new Object();
-//                }
-//            }
 
 
         } catch (IOException e) {
