@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import static java.lang.StrictMath.abs;
 
@@ -19,16 +21,20 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int y;
     private int olderX;
     private int olderY;
-    private boolean isClick = false;
+    private boolean isDragOn = false;
+
+    private long lastTouchDown;
+    private static int CLICK_ACTION_THRESHOLD = 100;
 
     private Button setIP;
     private Button rec;
-    private EditText etSetIP;
-    private View mvPane;
     private Button clickButton;
     private Button scDw;
     private Button scUp;
     private Button disc;
+    private EditText etSetIP;
+    private View mvPane;
+    private Switch dragSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class ControlPanelActivity extends AppCompatActivity {
         clickButton = findViewById(R.id.clickButton);
         etSetIP = findViewById(R.id.etSetIP);
         mvPane = findViewById(R.id.mvPane);
+        dragSwitch = findViewById(R.id.dragSwitch);
 
         connectListeners();
     }
@@ -72,7 +79,6 @@ public class ControlPanelActivity extends AppCompatActivity {
                     connect();
             }
         });
-
     }
 
     private void connectSocketRelatedListeners()
@@ -94,7 +100,22 @@ public class ControlPanelActivity extends AppCompatActivity {
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                socketProcessor.clickLmb();
+                socketProcessor.clickRmb();
+            }
+        });
+
+
+        dragSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                isDragOn = isChecked;
+
+                if (isChecked)
+                    socketProcessor.dragOn();
+                else
+                    socketProcessor.dragOff();
             }
         });
 
@@ -110,18 +131,23 @@ public class ControlPanelActivity extends AppCompatActivity {
                 {
                     olderX = x;
                     olderY = y;
-                    Log.d("mvPane", "Down");
+                    lastTouchDown = System.currentTimeMillis();
+
+                    return true;
                 }
 
-                if (action == MotionEvent.ACTION_UP)
+                if (action == MotionEvent.ACTION_UP && isDragOn)
                 {
-                    Log.d("mvPane", "Up");
+                    if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHOLD)
+                    {
+                        socketProcessor.clickLmb();
+                    }
+
+                    return false;
                 }
 
                 if (action == MotionEvent.ACTION_MOVE)
                 {
-                    isClick = false;
-
                     byte deltaXByte = Utils.intToByte(x - olderX);
                     byte deltaYByte = Utils.intToByte(y - olderY);
 
@@ -129,7 +155,9 @@ public class ControlPanelActivity extends AppCompatActivity {
 
                     olderX = x;
                     olderY = y;
+                    return true;
                 }
+
 
                 return true;
             }
@@ -142,6 +170,7 @@ public class ControlPanelActivity extends AppCompatActivity {
         scDw.setOnClickListener(null);
         clickButton.setOnClickListener(null);
         mvPane.setOnTouchListener(null);
+        dragSwitch.setOnCheckedChangeListener(null);
     }
 
     private void connect()

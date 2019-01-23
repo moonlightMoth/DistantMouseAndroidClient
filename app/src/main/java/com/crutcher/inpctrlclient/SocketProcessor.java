@@ -89,6 +89,18 @@ class SocketProcessor extends Thread
         flushWrapper();
     }
 
+    void dragOn()
+    {
+        byteWrapper[0] = DR_ON;
+        flushWrapper();
+    }
+
+    void dragOff()
+    {
+        byteWrapper[0] = DR_OF;
+        flushWrapper();
+    }
+
     synchronized void movePointer(byte deltaXByte, byte deltaYByte)
     {
         byteWrapper[0] = MV_XY;

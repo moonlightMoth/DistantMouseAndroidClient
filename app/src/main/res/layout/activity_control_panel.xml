@@ -92,22 +92,37 @@
                 android:layout_weight="5"
                 android:orientation="vertical">
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:text="mv pane"
-                    android:textColor="#000000"
-                    android:visibility="visible"
-                    android:textAlignment="center"
-                    android:layout_weight="5"
-                    android:id="@+id/mvPane"
-                    android:background="@color/colorPrimaryDark"
-                    android:textSize="100dp"/>
+                    android:layout_weight="5">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="mv pane"
+                        android:textColor="#000000"
+                        android:visibility="visible"
+                        android:textAlignment="center"
+                        android:id="@+id/mvPane"
+                        android:background="@color/colorPrimaryDark"
+                        android:textSize="100dp"/>
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="drag"
+                        android:layout_alignEnd="@+id/mvPane"
+                        android:background="#0FFFF0"
+                        android:id="@+id/dragSwitch"/>
+
+                </RelativeLayout>
+
 
                 <android.support.v7.widget.AppCompatButton
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:text="click"
+                    android:text="clickRmb"
                     android:id="@+id/clickButton"
                     android:layout_weight="1"/>
 
