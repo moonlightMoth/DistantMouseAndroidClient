@@ -181,6 +181,7 @@ public class ControlPanelActivity extends AppCompatActivity {
     private void disconnect()
     {
         isConnected = false;
+        dragSwitch.setChecked(false);
         Log.d("disconnect", "processing");
 
         try
