@@ -1,6 +1,5 @@
 package com.crutcher.inpctrlclient;
 
-import android.annotation.SuppressLint;
 import android.os.StrictMode;
 import android.util.Log;
 

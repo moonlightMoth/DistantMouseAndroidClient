@@ -10,8 +10,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 
-import static java.lang.StrictMath.abs;
-
 public class ControlPanelActivity extends AppCompatActivity {
 
     SocketProcessor socketProcessor;
@@ -21,7 +19,7 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int y;
     private int olderX;
     private int olderY;
-    private boolean isDragOn = false;
+    private boolean isFirstClickAfterSwitchingDrag = false;
 
     private long lastTouchDown;
     private static int CLICK_ACTION_THRESHOLD = 100;
@@ -104,14 +102,11 @@ public class ControlPanelActivity extends AppCompatActivity {
             }
         });
 
-
         dragSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
-                isDragOn = isChecked;
-
                 if (isChecked)
                     socketProcessor.dragOn();
                 else
@@ -136,7 +131,7 @@ public class ControlPanelActivity extends AppCompatActivity {
                     return true;
                 }
 
-                if (action == MotionEvent.ACTION_UP && isDragOn)
+                if (action == MotionEvent.ACTION_UP)
                 {
                     if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHOLD)
                     {
