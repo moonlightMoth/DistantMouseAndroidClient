@@ -21,7 +21,7 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int olderY;
 
     private long lastTouchDown;
-    private static int CLICK_ACTION_THRESHOLD = 150;
+    private static int CLICK_ACTION_THRESHOLD = 110;
 
     private Button setIP;
     private Button rec;
