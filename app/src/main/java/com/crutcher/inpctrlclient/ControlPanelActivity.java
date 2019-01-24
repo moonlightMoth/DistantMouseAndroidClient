@@ -19,10 +19,9 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int y;
     private int olderX;
     private int olderY;
-    private boolean isFirstClickAfterSwitchingDrag = false;
 
     private long lastTouchDown;
-    private static int CLICK_ACTION_THRESHOLD = 100;
+    private static int CLICK_ACTION_THRESHOLD = 150;
 
     private Button setIP;
     private Button rec;
