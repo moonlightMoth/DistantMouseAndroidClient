@@ -26,12 +26,13 @@ class SocketProcessor extends Thread
     private final byte CL_RB = 10;
     private final byte CL_MB = 11;
     private final byte MV_XY = 12;
+    private final byte SC_UD = 13;
     private final byte EXIT_SIGNAL = 127;
 
     private byte[] byteWrapper = new byte[3];
 
     @Override
-    public synchronized void start()
+    public void start()
     {
         super.start();
 
@@ -52,6 +53,7 @@ class SocketProcessor extends Thread
             String addr = GlobalVars.getIpAddr();
 
             socket = new Socket(addr, 1488);
+            socket.setTcpNoDelay(true);
 
             os = socket.getOutputStream();
 
@@ -100,7 +102,7 @@ class SocketProcessor extends Thread
         flushWrapper();
     }
 
-    synchronized void movePointer(byte deltaXByte, byte deltaYByte)
+    void movePointer(byte deltaXByte, byte deltaYByte)
     {
         byteWrapper[0] = MV_XY;
         byteWrapper[1] = deltaXByte;
@@ -108,16 +110,13 @@ class SocketProcessor extends Thread
         flushWrapper();
     }
 
-    private void createClickArea()
+    void scrollFreely(byte deltaY)
     {
-        //TODO for appropriate click
+        byteWrapper[0] = SC_UD;
+        byteWrapper[1] = deltaY;
+        flushWrapper();
     }
 
-    private boolean doesPointerBelongClickArea()
-    {
-        //TODO for appropriate click too
-        return false;
-    }
 
     private synchronized void spitOut(byte[] bytes)
     {

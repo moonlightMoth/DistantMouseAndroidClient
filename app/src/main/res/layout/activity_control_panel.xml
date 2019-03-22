@@ -62,29 +62,15 @@
             android:orientation="horizontal"
             android:layout_weight="14">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
-
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/scrollUp"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5"
-                    android:text="up" />
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/scrollDown"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5"
-                    android:text="dw" />
-
-
-            </LinearLayout>
+                android:layout_weight="1"
+                android:id="@+id/scPane"
+                android:text="s c pan e"
+                android:textColor="#000000"
+                android:textSize="55dp"
+                android:background="#FF0066"/>
 
             <LinearLayout
                 android:layout_width="0dp"

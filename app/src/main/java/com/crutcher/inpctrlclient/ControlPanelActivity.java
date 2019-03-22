@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import static java.lang.Math.abs;
 
 public class ControlPanelActivity extends AppCompatActivity {
 
@@ -22,12 +25,12 @@ public class ControlPanelActivity extends AppCompatActivity {
 
     private long lastTouchDown;
     private static int CLICK_ACTION_THRESHOLD = 110;
+    private static int SCROLL_THRESHOLD = 20;
 
     private Button setIP;
     private Button rec;
     private Button clickButton;
-    private Button scDw;
-    private Button scUp;
+    private View scPane;
     private Button disc;
     private EditText etSetIP;
     private View mvPane;
@@ -42,8 +45,7 @@ public class ControlPanelActivity extends AppCompatActivity {
         setIP = findViewById(R.id.bSetIP);
         rec = findViewById(R.id.reconnect);
         disc = findViewById(R.id.disc);
-        scUp = findViewById(R.id.scrollUp);
-        scDw = findViewById(R.id.scrollDown);
+        scPane = findViewById(R.id.scPane);
         clickButton = findViewById(R.id.clickButton);
         etSetIP = findViewById(R.id.etSetIP);
         mvPane = findViewById(R.id.mvPane);
@@ -80,17 +82,37 @@ public class ControlPanelActivity extends AppCompatActivity {
 
     private void connectSocketRelatedListeners()
     {
-        scUp.setOnClickListener(new View.OnClickListener() {
+        scPane.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public void onClick(View v) {
-                socketProcessor.scrollUp();
-            }
-        });
+            public boolean onTouch(View v, MotionEvent motionEvent)
+            {
+                int action = motionEvent.getAction();
+                y = (int) motionEvent.getY();
 
-        scDw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                socketProcessor.scrollDw();
+                if (action == MotionEvent.ACTION_DOWN)
+                {
+                    olderY = y;
+
+                    return true;
+                }
+
+                if (action == MotionEvent.ACTION_UP)
+                {
+                    return false;
+                }
+
+                if (action == MotionEvent.ACTION_MOVE)
+                {
+                    if (abs(y - olderY) > SCROLL_THRESHOLD)
+                    {
+                        socketProcessor.scrollFreely(Utils.intToByte((y - olderY) / SCROLL_THRESHOLD));
+                        olderY = y;
+                    }
+                    return true;
+                }
+
+                return true;
             }
         });
 
@@ -152,7 +174,6 @@ public class ControlPanelActivity extends AppCompatActivity {
                     return true;
                 }
 
-
                 return true;
             }
         });
@@ -160,8 +181,7 @@ public class ControlPanelActivity extends AppCompatActivity {
 
     private void removeSocketRelatedListeners()
     {
-        scUp.setOnClickListener(null);
-        scDw.setOnClickListener(null);
+        scPane.setOnClickListener(null);
         clickButton.setOnClickListener(null);
         mvPane.setOnTouchListener(null);
         dragSwitch.setOnCheckedChangeListener(null);
