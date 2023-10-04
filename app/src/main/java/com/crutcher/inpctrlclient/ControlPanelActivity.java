@@ -139,20 +139,27 @@ public class ControlPanelActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                int action = motionEvent.getAction();
-                x = (int) motionEvent.getX();
-                y = (int) motionEvent.getY();
 
-                if (action == MotionEvent.ACTION_DOWN)
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE)
                 {
-                    olderX = x;
-                    olderY = y;
+                    socketProcessor.movePointer(Utils.intToByte((int) motionEvent.getX() - olderX),
+                            Utils.intToByte((int) motionEvent.getY() - olderY));
+
+                    olderX = (int) motionEvent.getX();
+                    olderY = (int) motionEvent.getY();
+                    return true;
+                }
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    olderX = (int) motionEvent.getX();
+                    olderY = (int) motionEvent.getY();
                     lastTouchDown = System.currentTimeMillis();
 
                     return true;
                 }
 
-                if (action == MotionEvent.ACTION_UP)
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
                     if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHOLD)
                     {
@@ -160,18 +167,6 @@ public class ControlPanelActivity extends AppCompatActivity {
                     }
 
                     return false;
-                }
-
-                if (action == MotionEvent.ACTION_MOVE)
-                {
-                    byte deltaXByte = Utils.intToByte(x - olderX);
-                    byte deltaYByte = Utils.intToByte(y - olderY);
-
-                    socketProcessor.movePointer(deltaXByte, deltaYByte);
-
-                    olderX = x;
-                    olderY = y;
-                    return true;
                 }
 
                 return true;

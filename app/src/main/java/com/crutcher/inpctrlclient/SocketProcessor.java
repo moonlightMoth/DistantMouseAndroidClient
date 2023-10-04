@@ -145,6 +145,35 @@ class SocketProcessor extends Thread
         socket.shutdownOutput();
         socket.close();
     }
+
+    void test()
+    {
+        for (int i = 0; i < 1000; i++) {
+            byteWrapper[0] = MV_XY;
+            byteWrapper[1] = 1;
+            byteWrapper[2] = 1;
+            flushWrapper();
+        }
+        for (int i = 0; i < 1000; i++) {
+            byteWrapper[0] = MV_XY;
+            byteWrapper[1] = -1;
+            byteWrapper[2] = 1;
+            flushWrapper();
+        }
+        for (int i = 0; i < 1000; i++) {
+            byteWrapper[0] = MV_XY;
+            byteWrapper[1] = 1;
+            byteWrapper[2] = -1;
+            flushWrapper();
+        }
+        for (int i = 0; i < 1000; i++) {
+            byteWrapper[0] = MV_XY;
+            byteWrapper[1] = -1;
+            byteWrapper[2] = -1;
+            flushWrapper();
+        }
+    }
+
 }
 
 
