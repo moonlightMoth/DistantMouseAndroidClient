@@ -23,12 +23,25 @@
                 android:layout_weight="4"
                 android:id="@+id/etSetIP"/>
 
-            <Button
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="OK"
-                android:id="@+id/bSetIP"/>
+                >
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="OK"
+                    android:id="@+id/bSetIP"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/bScan"
+                    android:text="Scan" />
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -44,14 +57,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/reconnect"
-                android:text="rec"/>
+                android:text="Connect"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/disc"
-                android:text="disc"/>
+                android:text="Disconnect"/>
 
 
         </LinearLayout>
@@ -67,7 +80,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/scPane"
-                android:text="s c pan e"
+                android:text="s   c    r    o    l      l"
                 android:textColor="#000000"
                 android:textSize="55dp"
                 android:background="#FF0066"/>
@@ -86,7 +99,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="mv pane"
+                        android:text="move pane"
                         android:textColor="#000000"
                         android:visibility="visible"
                         android:textAlignment="center"
@@ -108,7 +121,7 @@
                 <android.support.v7.widget.AppCompatButton
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:text="clickRmb"
+                    android:text="click Rmb"
                     android:id="@+id/clickButton"
                     android:layout_weight="1"/>
 
@@ -119,5 +132,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TCP.0.00"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#FFFFFF"
+        android:id="@+id/tvVersion"
+        />
 
 </android.support.constraint.ConstraintLayout>

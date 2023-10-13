@@ -5,11 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.autofill.AutofillValue;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.net.InetAddress;
 
 import static java.lang.Math.abs;
 
@@ -24,8 +28,8 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int olderY;
 
     private long lastTouchDown;
-    private static int CLICK_ACTION_THRESHOLD = 110;
-    private static int SCROLL_THRESHOLD = 20;
+    private static final int CLICK_ACTION_THRESHOLD = 110;
+    private static final int SCROLL_THRESHOLD = 20;
 
     private Button setIP;
     private Button rec;
@@ -35,6 +39,7 @@ public class ControlPanelActivity extends AppCompatActivity {
     private EditText etSetIP;
     private View mvPane;
     private Switch dragSwitch;
+    private Button scanButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,9 @@ public class ControlPanelActivity extends AppCompatActivity {
         etSetIP = findViewById(R.id.etSetIP);
         mvPane = findViewById(R.id.mvPane);
         dragSwitch = findViewById(R.id.dragSwitch);
+        scanButton = findViewById(R.id.bScan);
+
+        ((TextView)findViewById(R.id.tvVersion)).setText(BuildConfig.VERSION_NAME);
 
         connectListeners();
     }
@@ -78,6 +86,27 @@ public class ControlPanelActivity extends AppCompatActivity {
                     connect();
             }
         });
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ScanAsyncTask scanAsyncTask = new ScanAsyncTask(ControlPanelActivity.this::insertAutofill);
+                scanAsyncTask.execute(0);
+
+            }
+        });
+    }
+
+    private void insertAutofill(InetAddress inetAddress)
+    {
+        if (inetAddress != null) {
+            Toast.makeText(ControlPanelActivity.this, inetAddress.getHostAddress() + " found", Toast.LENGTH_LONG).show();
+            etSetIP.autofill(AutofillValue.forText(inetAddress.getHostAddress()));
+        }
+        else
+            Toast.makeText(ControlPanelActivity.this, "No response from any server", Toast.LENGTH_LONG).show();
+
     }
 
     private void connectSocketRelatedListeners()
