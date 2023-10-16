@@ -4,7 +4,6 @@ import static android.support.constraint.Constraints.TAG;
 
 import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -19,6 +18,7 @@ import java.util.Enumeration;
 
 public class ScanAsyncTask extends AsyncTask<Integer, Integer, InetAddress> {
 
+    private static final int TIMEOUT_MS = 10000;
     Observer<InetAddress> observer;
 
     public ScanAsyncTask(Observer<InetAddress> observer)
@@ -45,7 +45,7 @@ public class ScanAsyncTask extends AsyncTask<Integer, Integer, InetAddress> {
 
             outSocket = new DatagramSocket(1338);
             inSocket = new DatagramSocket(1336);
-            inSocket.setSoTimeout(15000);
+            inSocket.setSoTimeout(TIMEOUT_MS);
             outSocket.setBroadcast(true);
 
             interfaces = NetworkInterface.getNetworkInterfaces();
@@ -60,13 +60,14 @@ public class ScanAsyncTask extends AsyncTask<Integer, Integer, InetAddress> {
             {
                 InetAddress broadcast = interfaceAddress.getBroadcast();
 
-                Log.d("ScanAsyncTask", "doInBackground: " + interfaceAddress.getAddress());
+                Log.d("ScanAsyncTask", "doInBackground: " + interfaceAddress.getAddress() + " " + broadcast);
 
                 if (broadcast == null)
                     continue;
 
-                SendAsyncTask receiveAsyncTask = new SendAsyncTask();
-                receiveAsyncTask.execute(broadcast);
+//                for (int i = 0; i < 5; i++) {
+                new SendAsyncTask().execute(broadcast);
+//                }
             }
         }
         } catch (SocketException e) {
@@ -76,10 +77,6 @@ public class ScanAsyncTask extends AsyncTask<Integer, Integer, InetAddress> {
         return null;
     }
 
-    @Override
-    protected void onPostExecute(InetAddress inetAddress) {
-        super.onPostExecute(inetAddress);
-    }
 
     class SendAsyncTask extends AsyncTask<InetAddress, Integer, InetAddress>
     {

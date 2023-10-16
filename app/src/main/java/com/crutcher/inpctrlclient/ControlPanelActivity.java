@@ -9,6 +9,7 @@ import android.view.autofill.AutofillValue;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class ControlPanelActivity extends AppCompatActivity {
     private View mvPane;
     private Switch dragSwitch;
     private Button scanButton;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class ControlPanelActivity extends AppCompatActivity {
         mvPane = findViewById(R.id.mvPane);
         dragSwitch = findViewById(R.id.dragSwitch);
         scanButton = findViewById(R.id.bScan);
+        progressBar = findViewById(R.id.progressBar);
 
         ((TextView)findViewById(R.id.tvVersion)).setText(BuildConfig.VERSION_NAME);
 
@@ -93,15 +96,27 @@ public class ControlPanelActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.d(TAG, "onClick: Scan clicked");
-                ScanAsyncTask scanAsyncTask = new ScanAsyncTask(ControlPanelActivity.this::insertAutofill);
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                ScanAsyncTask scanAsyncTask = new ScanAsyncTask(ControlPanelActivity.this::scanObserverMethod);
                 scanAsyncTask.execute(0);
 
             }
         });
     }
 
-    private void insertAutofill(InetAddress inetAddress)
+    private void scanObserverMethod(InetAddress inetAddress)
     {
+        progressBar.setVisibility(View.GONE);
+
+        insertDiscoveredAddress(inetAddress);
+    }
+
+    private void insertDiscoveredAddress(InetAddress inetAddress)
+    {
+
+
         if (inetAddress != null) {
             Toast.makeText(ControlPanelActivity.this, inetAddress.getHostAddress() + " found", Toast.LENGTH_LONG).show();
             etSetIP.autofill(AutofillValue.forText(inetAddress.getHostAddress()));
