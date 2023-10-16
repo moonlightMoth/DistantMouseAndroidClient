@@ -19,6 +19,7 @@ import static java.lang.Math.abs;
 
 public class ControlPanelActivity extends AppCompatActivity {
 
+    private static final String TAG = "ControlPanelActivity";
     SocketProcessor socketProcessor;
     boolean isConnected = false;
 
@@ -91,6 +92,7 @@ public class ControlPanelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Log.d(TAG, "onClick: Scan clicked");
                 ScanAsyncTask scanAsyncTask = new ScanAsyncTask(ControlPanelActivity.this::insertAutofill);
                 scanAsyncTask.execute(0);
 
