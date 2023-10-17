@@ -86,8 +86,9 @@ public class ControlPanelActivity extends AppCompatActivity {
         rec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isConnected)
-                    connect();
+                disconnect();
+                GlobalVars.setIpAddr(etSetIP.getText().toString());
+                connect();
             }
         });
 
