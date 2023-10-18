@@ -30,8 +30,10 @@ public class ControlPanelActivity extends AppCompatActivity {
     private int olderY;
 
     private long lastTouchDown;
-    private static final int CLICK_ACTION_THRESHOLD = 110;
+    private int motionCountSinceLastDown = 0;
+    private static final int CLICK_ACTION_THRESHOLD = 170;
     private static final int SCROLL_THRESHOLD = 20;
+    private static final int MV_PANE_DRAG_ON_THRESHOLD = 330;
 
     private Button setIP;
     private Button rec;
@@ -189,31 +191,54 @@ public class ControlPanelActivity extends AppCompatActivity {
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_MOVE)
                 {
+                    Log.d(TAG, "onTouch: ACTION_MOVE");
                     socketProcessor.movePointer(Utils.intToByte((int) motionEvent.getX() - olderX),
                             Utils.intToByte((int) motionEvent.getY() - olderY));
 
                     olderX = (int) motionEvent.getX();
                     olderY = (int) motionEvent.getY();
+
+                    motionCountSinceLastDown++;
+
                     return true;
                 }
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
                 {
+                    Log.d(TAG, "onTouch: ACTION_DOWN");
+
+                    if (System.currentTimeMillis() - lastTouchDown < MV_PANE_DRAG_ON_THRESHOLD
+                            && motionCountSinceLastDown < 4)
+                    {
+                        dragSwitch.setChecked(true);
+                        Log.d(TAG, "onTouch: DRAG_ON");
+                    }
+
                     olderX = (int) motionEvent.getX();
                     olderY = (int) motionEvent.getY();
                     lastTouchDown = System.currentTimeMillis();
+
+                    motionCountSinceLastDown = 0;
 
                     return true;
                 }
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
-                    if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHOLD)
+                    Log.d(TAG, "onTouch: ACTION_UP");
+                    if (dragSwitch.isChecked())
+                        dragSwitch.setChecked(false);
+
+                    if (System.currentTimeMillis() - lastTouchDown < CLICK_ACTION_THRESHOLD
+                            && motionCountSinceLastDown < 4)
                     {
                         socketProcessor.clickLmb();
+                        Log.d(TAG, "onTouch: clicked LMB");
                     }
 
-                    return false;
+
+
+                    return true;
                 }
 
                 return true;
