@@ -103,7 +103,7 @@ jobs:
         java-version: '11'
         distribution: 'oracle'
         cache: gradle
-build7:
+  build7:
 
     runs-on: ubuntu-latest
 
