@@ -5,13 +5,6 @@
 /.idea/modules.xml
 /.idea/workspace.xml
 .DS_Store
-/build/intermediates
-/build/generated
-/build/tmp
-/build/logs
-/build/outputs/apk/androidTest
-/build/outputs/logs
-/build/outputs/apk/debug/output.json
 /captures
 .externalNativeBuild
 .idea

@@ -24,3 +24,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: DistantMouseCAndroidClient
+          path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+          overwrite: true

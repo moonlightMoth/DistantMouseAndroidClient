@@ -19,7 +19,7 @@ android {
             variant ->
                 variant.outputs.each{
                     output->
-                        def name = "InpCtrlClient_${versionName}.apk"
+                        def name = "DistantMouse_${versionName}.apk"
                         output.outputFileName = name
                 }
         }
