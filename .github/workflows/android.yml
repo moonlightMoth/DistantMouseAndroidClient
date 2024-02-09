@@ -42,6 +42,17 @@ jobs:
         java-version: '11'
         distribution: 'zulu'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
   build2:
 
     runs-on: ubuntu-latest
@@ -54,6 +65,17 @@ jobs:
         java-version: '11'
         distribution: 'liberica'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
   build3:
 
     runs-on: ubuntu-latest
@@ -66,6 +88,17 @@ jobs:
         java-version: '11'
         distribution: 'microsoft'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
   build4:
 
     runs-on: ubuntu-latest
@@ -76,8 +109,19 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'correttu'
+        distribution: 'corretto'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
 
   build5:
 
@@ -91,6 +135,17 @@ jobs:
         java-version: '11'
         distribution: 'semeru'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
   build6:
 
     runs-on: ubuntu-latest
@@ -103,6 +158,17 @@ jobs:
         java-version: '11'
         distribution: 'oracle'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
   build7:
 
     runs-on: ubuntu-latest
@@ -115,4 +181,15 @@ jobs:
         java-version: '11'
         distribution: 'dragonwell'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: DistantMouseCAndroidClient
+        path: /home/runner/work/DistantMouseAndroidClient/DistantMouseAndroidClient/app/build/outputs/apk/debug/*.apk
+        overwrite: true
 
